@@ -1,0 +1,36 @@
+name: Update GitHub Profile Cards
+
+"on":
+  workflow_dispatch:
+
+  schedule:
+    - cron: "37 2 * * *"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: profile-cards
+  cancel-in-progress: true
+
+jobs:
+  profile-cards:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+
+      - name: Generate profile cards
+        uses: seijikohara/profile-cards-action@v1
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          username: Divaa24
+
+          cards: overview,contributions,lifetime
+          output-dir: assets/github-profile
+          themes: light,dark
+
+          commit: true
+          commit-message: "chore(profile): update GitHub profile cards [skip ci]"
